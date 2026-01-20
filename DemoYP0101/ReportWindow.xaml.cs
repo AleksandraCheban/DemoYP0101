@@ -26,6 +26,7 @@ namespace DemoYP0101
             InitializeComponent();
             LoadReport();
         }
+
         public ReportWindow(Users user)
         {
             InitializeComponent();
