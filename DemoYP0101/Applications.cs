@@ -12,17 +12,18 @@ namespace DemoYP0101
     using System;
     using System.Collections.Generic;
     
-    public partial class Arrears
+    public partial class Applications
     {
         public int Id { get; set; }
         public int AdressId { get; set; }
-        public string Flat { get; set; }
         public int UserId { get; set; }
         public string Phone { get; set; }
-        public decimal Water { get; set; }
-        public Nullable<decimal> ElectricPower { get; set; }
+        public string Description { get; set; }
+        public int ExecutorId { get; set; }
     
+        public virtual Executor Executor { get; set; }
         public virtual ListHousingStock ListHousingStock { get; set; }
         public virtual Users Users { get; set; }
+        public virtual Users Users1 { get; set; }
     }
 }

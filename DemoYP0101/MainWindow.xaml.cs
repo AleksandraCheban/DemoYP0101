@@ -43,14 +43,14 @@ namespace DemoYP0101
             else
             {
                 CurrentSession.CurrentUser = user;
-                new ReportWindow(user).Show();
+                new MenuWindow(user).Show();
                 Close();
             }
         }
 
         private void TextBloxk_MouseDown(object sender, RoutedEventArgs e)
         {
-            new ReportWindow().Show();
+            new MenuWindow().Show();
             Close();
         }
 

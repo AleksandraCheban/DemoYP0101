@@ -16,6 +16,7 @@ namespace DemoYP0101
     {
         public ListHousingStock()
         {
+            this.Applications = new HashSet<Applications>();
             this.Arrears = new HashSet<Arrears>();
             this.PaymentReport = new HashSet<PaymentReport>();
         }
@@ -28,6 +29,7 @@ namespace DemoYP0101
         public string Year { get; set; }
         public decimal Square { get; set; }
     
+        public virtual ICollection<Applications> Applications { get; set; }
         public virtual ICollection<Arrears> Arrears { get; set; }
         public virtual ICollection<PaymentReport> PaymentReport { get; set; }
     }

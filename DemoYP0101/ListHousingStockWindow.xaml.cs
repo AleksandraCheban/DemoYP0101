@@ -12,29 +12,29 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Data.SqlClient;
+using System.Data.Entity;
 
 namespace DemoYP0101
 {
     /// <summary>
-    /// Логика взаимодействия для ReportWindow.xaml
+    /// Логика взаимодействия для ListHousingStockWindow.xaml
     /// </summary>
-    public partial class ReportWindow : Window
+    public partial class ListHousingStockWindow : Window
     {
         private Entities _db = new Entities();
-        public ReportWindow()
+        public ListHousingStockWindow()
         {
             InitializeComponent();
-            LoadReport();
+            LoadList();
             CheckUserRole();
         }
-
-        public ReportWindow(Users user)
+        public ListHousingStockWindow(Users user)
         {
             InitializeComponent();
-            LoadReport();
+            LoadList();
             CheckUserRole();
         }
-
         private void CheckUserRole()
         {
             var currentUser = CurrentSession.CurrentUser;
@@ -55,26 +55,26 @@ namespace DemoYP0101
             }
         }
 
-        private void LoadReport()
+        private void LoadList()
         {
 
-            var reportData = _db.PaymentReport
+            var reportData = _db.ListHousingStock
         .Select(pr => new
         {
             pr.Id,
-            pr.UserId,
-            pr.AdressId,
+            pr.Adress,
+            pr.Beginning,
+            pr.Floors,
             pr.Flat,
-            pr.Period,
-            pr.Accrued,
-            pr.Paid,
-            UserName = _db.Users.Where(u => u.Id == pr.UserId).Select(u => u.Name).FirstOrDefault(),
-            Adress = _db.ListHousingStock.Where(lhs => lhs.Id == pr.AdressId).Select(lhs => lhs.Adress).FirstOrDefault()
+            pr.Year,
+            pr.Square,
+            
         })
         .ToList();
 
-            ReportGrid.ItemsSource = reportData;
+            ListGrid.ItemsSource = reportData;
         }
+
 
         private void LogOutButton_Click(object sender, RoutedEventArgs e)
         {
@@ -85,12 +85,12 @@ namespace DemoYP0101
 
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
-            if (ReportGrid.SelectedItem != null)
+            if (ListGrid.SelectedItem != null)
             {
-                dynamic selectedItem = ReportGrid.SelectedItem;
-                int paymentReportId = selectedItem.Id;
+                dynamic selectedItem = ListGrid.SelectedItem;
+                int housingStockId = selectedItem.Id;
 
-                var result = MessageBox.Show("Вы уверены, что хотите удалить этот платежный отчет?",
+                var result = MessageBox.Show("Вы уверены, что хотите удалить эту запись жилищного фонда?",
                                             "Подтверждение удаления",
                                             MessageBoxButton.YesNo,
                                             MessageBoxImage.Question);
@@ -99,13 +99,26 @@ namespace DemoYP0101
                 {
                     try
                     {
-                        var paymentReportToDelete = _db.PaymentReport.Find(paymentReportId);
-                        if (paymentReportToDelete != null)
+                        // Проверяем, есть ли связанные записи в других таблицах
+                        bool hasRelatedArrears = _db.Arrears.Any(a => a.AdressId == housingStockId);
+                        bool hasRelatedPayments = _db.PaymentReport.Any(p => p.AdressId == housingStockId);
+
+                        if (hasRelatedArrears || hasRelatedPayments)
                         {
-                            _db.PaymentReport.Remove(paymentReportToDelete);
+                            MessageBox.Show("Невозможно удалить запись, так как с ней связаны задолженности или платежи",
+                                          "Ошибка",
+                                          MessageBoxButton.OK,
+                                          MessageBoxImage.Error);
+                            return;
+                        }
+
+                        var housingStockToDelete = _db.ListHousingStock.Find(housingStockId);
+                        if (housingStockToDelete != null)
+                        {
+                            _db.ListHousingStock.Remove(housingStockToDelete);
                             _db.SaveChanges();
-                            LoadReport(); // Обновляем таблицу
-                            MessageBox.Show("Платежный отчет успешно удален",
+                            LoadList(); // Обновляем таблицу
+                            MessageBox.Show("Запись успешно удалена",
                                           "Успех",
                                           MessageBoxButton.OK,
                                           MessageBoxImage.Information);
@@ -133,10 +146,10 @@ namespace DemoYP0101
         {
             try
             {
-                var addWindow = new AddEditPaymentReportWindow();
+                var addWindow = new AddEditHousingStockWindow();
                 if (addWindow.ShowDialog() == true)
                 {
-                    LoadReport(); // Обновляем таблицу после добавления
+                    LoadList(); // Обновляем таблицу после добавления
                 }
             }
             catch (Exception ex)
@@ -147,20 +160,20 @@ namespace DemoYP0101
 
         private void Remake_Click(object sender, RoutedEventArgs e)
         {
-            if (ReportGrid.SelectedItem != null)
+            if (ListGrid.SelectedItem != null)
             {
                 try
                 {
-                    dynamic selectedItem = ReportGrid.SelectedItem;
-                    int paymentReportId = selectedItem.Id;
+                    dynamic selectedItem = ListGrid.SelectedItem;
+                    int housingStockId = selectedItem.Id;
 
-                    var paymentReportToEdit = _db.PaymentReport.Find(paymentReportId);
-                    if (paymentReportToEdit != null)
+                    var housingStockToEdit = _db.ListHousingStock.Find(housingStockId);
+                    if (housingStockToEdit != null)
                     {
-                        var editWindow = new AddEditPaymentReportWindow(paymentReportToEdit);
+                        var editWindow = new AddEditHousingStockWindow(housingStockToEdit);
                         if (editWindow.ShowDialog() == true)
                         {
-                            LoadReport(); // Обновляем таблицу после редактирования
+                            LoadList(); // Обновляем таблицу после редактирования
                         }
                     }
                 }

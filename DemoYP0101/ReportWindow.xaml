@@ -5,63 +5,78 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DemoYP0101"
         mc:Ignorable="d"
-        Title="ReportWindow" Height="450" Width="800">
+        Title="Отчеты" Height="450" Width="800">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="150*"/>
-            <RowDefinition Height="480*"/>
-            <RowDefinition Height="50*"/>
+            <RowDefinition Height="96*"/>
+            <RowDefinition Height="297*"/>
+            <RowDefinition Height="41*"/>
         </Grid.RowDefinitions>
 
         <TextBlock Name="FullUserName"
                VerticalAlignment="Top"
                HorizontalAlignment="Right"
-               Margin="20 10"/>
+               Margin="0,10,20,0" Height="27" Width="0"/>
 
-        <ScrollViewer Grid.Row="1">
-            <ItemsControl Name="ReportList">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Border Margin="10">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                </Grid.ColumnDefinitions>
+        <DataGrid x:Name="ReportGrid"
+                  Grid.Row="1"
+                  Margin="10"
+                  AutoGenerateColumns="False"
+                  CanUserAddRows="False"
+                  IsReadOnly="True"
+                  SelectionMode="Single">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ФИО" 
+                                    Binding="{Binding UserName}" 
+                                    Width="150"/>
+                <DataGridTextColumn Header="Адрес" 
+                                    Binding="{Binding Adress}" 
+                                    Width="200"/>
+                <DataGridTextColumn Header="Квартира" 
+                                    Binding="{Binding Flat}" 
+                                    Width="80"/>
+                <DataGridTextColumn Header="Период" 
+                                    Binding="{Binding Period}" 
+                                    Width="100"/>
+                <DataGridTextColumn Header="Начислено" 
+                                    Binding="{Binding Accrued}" 
+                                    Width="100"/>
+                <DataGridTextColumn Header="Оплачено" 
+                                    Binding="{Binding Paid}" 
+                                    Width="100"/>
+            </DataGrid.Columns>
+        </DataGrid>
 
-                               
-
-                                <StackPanel Grid.Column="1">
-                                    <TextBlock FontWeight="SemiBold">
-                                    <Run Text="{Binding Users.Name}"/>
-                                    <Run Text=" | "/>
-                                    <Run Text="{Binding AdressId}"/>
-                                    <Run Text=" | "/>
-                                    <Run Text="{Binding Flat}"/>
-                                    <Run Text=" | "/>
-                                    <Run Text="{Binding Accrued}"/>
-                                    <Run Text=" | "/>
-                                    <Run Text="{Binding Paid}"/>
-                                    </TextBlock>
-
-                                    
-                                </StackPanel>
-                                
-                            </Grid>
-                        </Border>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </ScrollViewer>
 
         <Button x:Name="LogOutButton"
-            Content="Выйти"
+            Content="Назад"
             Grid.Row="2"
             VerticalAlignment="Center"
             HorizontalAlignment="Left"
             Margin="20,0,0,0"
-            Click="LogOutButton_Click"/>
+            Click="LogOutButton_Click" Height="31" Width="61"/>
 
+        <Button x:Name="Remake"
+    Content="Изменить"
+    Grid.Row="2"
+    VerticalAlignment="Center"
+    HorizontalAlignment="Left"
+    Margin="486,0,0,0"
+    Click="Remake_Click" Height="31" Width="127"/>
+
+        <Button x:Name="AddButton"
+    Content="Добавить"
+    Grid.Row="2"
+    VerticalAlignment="Center"
+    HorizontalAlignment="Left"
+    Margin="637,0,0,0"
+    Click="AddButton_Click" Height="31" Width="118"/>
+        <Button x:Name="DeleteButton"
+        Content="Удалить"
+        Grid.Row="2"
+        VerticalAlignment="Center"
+        HorizontalAlignment="Left"
+        Margin="371,0,0,0"
+        Click="DeleteButton_Click" Height="31" Width="93"/>
     </Grid>
 </Window>

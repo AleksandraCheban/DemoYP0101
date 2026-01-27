@@ -26,7 +26,6 @@ namespace DemoYP0101
 
             return _context;
         }
-
         public Entities()
             : base("name=Entities")
         {
@@ -37,7 +36,9 @@ namespace DemoYP0101
             throw new UnintentionalCodeFirstException();
         }
     
+        public DbSet<Applications> Applications { get; set; }
         public DbSet<Arrears> Arrears { get; set; }
+        public DbSet<Executor> Executor { get; set; }
         public DbSet<ListHousingStock> ListHousingStock { get; set; }
         public DbSet<PaymentReport> PaymentReport { get; set; }
         public DbSet<Role> Role { get; set; }

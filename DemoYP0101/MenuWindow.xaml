@@ -1,0 +1,53 @@
+﻿<Window x:Class="DemoYP0101.MenuWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DemoYP0101"
+        mc:Ignorable="d"
+        Title="Меню" Height="470" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="150*"/>
+            <RowDefinition Height="480*"/>
+            <RowDefinition Height="50*"/>
+        </Grid.RowDefinitions>
+
+        <Button x:Name="ListHousingStockButton"
+    Content="Жилой фонд"
+    Grid.Row="1"
+    VerticalAlignment="Center"
+    HorizontalAlignment="Left"
+    Margin="50,0,0,0"
+    Click="ListHousingStockButton_Click" Width="147"/>
+        <Button x:Name="ArrearsButton"
+    Content="Задолжности"
+    Grid.Row="1"
+    VerticalAlignment="Top"
+    HorizontalAlignment="Left"
+    Margin="50,205,0,0"
+    Click="ArrearsButton_Click" Width="147"/>
+        <Button x:Name="ReportButton"
+    Content="Отчеты"
+    Grid.Row="1"
+    VerticalAlignment="Top"
+    HorizontalAlignment="Left"
+    Margin="50,75,0,0"
+    Click="ReportButton_Click" Width="147"/>
+        <Button x:Name="LogOutButton"
+            Content="Выйти"
+            Grid.Row="1"
+            VerticalAlignment="Top"
+            HorizontalAlignment="Left"
+            Margin="50,266,0,0"
+            Click="LogOutButton_Click" Width="147"/>
+        <Image Margin="426,75,126,40" Source="/logo.png" Stretch="Fill" Grid.Row="1"/>
+        <Button x:Name="ApplicationButton"
+            Content="Заявки"
+            Grid.Row="1"
+            VerticalAlignment="Top"
+            HorizontalAlignment="Left"
+            Margin="50,10,0,0"
+            Click="ApplicationButton_Click" Width="147"/>
+    </Grid>
+</Window>

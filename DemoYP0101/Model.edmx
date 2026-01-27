@@ -5,6 +5,17 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
       <Schema Namespace="Хранилище Model" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Applications">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AdressId" Type="int" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="50" />
+          <Property Name="Description" Type="nvarchar" MaxLength="300" />
+          <Property Name="ExecutorId" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="Arrears">
           <Key>
             <PropertyRef Name="Id" />
@@ -16,6 +27,13 @@
           <Property Name="Phone" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Water" Type="money" Nullable="false" />
           <Property Name="ElectricPower" Type="money" />
+        </EntityType>
+        <EntityType Name="Executor">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="ListHousingStock">
           <Key>
@@ -68,6 +86,54 @@
           <Property Name="Password" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="RoleId" Type="int" Nullable="false" />
         </EntityType>
+        <Association Name="FK_Applications_Executor">
+          <End Role="Executor" Type="Self.Executor" Multiplicity="1" />
+          <End Role="Applications" Type="Self.Applications" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Executor">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Applications">
+              <PropertyRef Name="ExecutorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Applications_ListHousingStock">
+          <End Role="ListHousingStock" Type="Self.ListHousingStock" Multiplicity="1" />
+          <End Role="Applications" Type="Self.Applications" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ListHousingStock">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Applications">
+              <PropertyRef Name="AdressId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Applications_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Applications" Type="Self.Applications" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Applications">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Applications_Users1">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Applications" Type="Self.Applications" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Applications">
+              <PropertyRef Name="ExecutorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Arrears_ListHousingStock">
           <End Role="ListHousingStock" Type="Self.ListHousingStock" Multiplicity="1" />
           <End Role="Arrears" Type="Self.Arrears" Multiplicity="*" />
@@ -77,6 +143,18 @@
             </Principal>
             <Dependent Role="Arrears">
               <PropertyRef Name="AdressId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Arrears_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Arrears" Type="Self.Arrears" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Arrears">
+              <PropertyRef Name="UserId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -117,14 +195,36 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="Хранилище ModelContainer">
+          <EntitySet Name="Applications" EntityType="Self.Applications" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Arrears" EntityType="Self.Arrears" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Executor" EntityType="Self.Executor" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ListHousingStock" EntityType="Self.ListHousingStock" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PaymentReport" EntityType="Self.PaymentReport" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Applications_Executor" Association="Self.FK_Applications_Executor">
+            <End Role="Executor" EntitySet="Executor" />
+            <End Role="Applications" EntitySet="Applications" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Applications_ListHousingStock" Association="Self.FK_Applications_ListHousingStock">
+            <End Role="ListHousingStock" EntitySet="ListHousingStock" />
+            <End Role="Applications" EntitySet="Applications" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Applications_Users" Association="Self.FK_Applications_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Applications" EntitySet="Applications" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Applications_Users1" Association="Self.FK_Applications_Users1">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Applications" EntitySet="Applications" />
+          </AssociationSet>
           <AssociationSet Name="FK_Arrears_ListHousingStock" Association="Self.FK_Arrears_ListHousingStock">
             <End Role="ListHousingStock" EntitySet="ListHousingStock" />
+            <End Role="Arrears" EntitySet="Arrears" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Arrears_Users" Association="Self.FK_Arrears_Users">
+            <End Role="Users" EntitySet="Users" />
             <End Role="Arrears" EntitySet="Arrears" />
           </AssociationSet>
           <AssociationSet Name="FK_PaymentReport_ListHousingStock" Association="Self.FK_PaymentReport_ListHousingStock">
@@ -145,6 +245,21 @@
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Applications">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AdressId" Type="Int32" Nullable="false" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="ExecutorId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Executor" Relationship="Self.FK_Applications_Executor" FromRole="Applications" ToRole="Executor" />
+          <NavigationProperty Name="ListHousingStock" Relationship="Self.FK_Applications_ListHousingStock" FromRole="Applications" ToRole="ListHousingStock" />
+          <NavigationProperty Name="Users" Relationship="Self.FK_Applications_Users" FromRole="Applications" ToRole="Users" />
+          <NavigationProperty Name="Users1" Relationship="Self.FK_Applications_Users1" FromRole="Applications" ToRole="Users" />
+        </EntityType>
         <EntityType Name="Arrears">
           <Key>
             <PropertyRef Name="Id" />
@@ -157,6 +272,15 @@
           <Property Name="Water" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
           <Property Name="ElectricPower" Type="Decimal" Precision="19" Scale="4" />
           <NavigationProperty Name="ListHousingStock" Relationship="Self.FK_Arrears_ListHousingStock" FromRole="Arrears" ToRole="ListHousingStock" />
+          <NavigationProperty Name="Users" Relationship="Self.FK_Arrears_Users" FromRole="Arrears" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="Executor">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Applications" Relationship="Self.FK_Applications_Executor" FromRole="Executor" ToRole="Applications" />
         </EntityType>
         <EntityType Name="ListHousingStock">
           <Key>
@@ -169,6 +293,7 @@
           <Property Name="Flat" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Year" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Square" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <NavigationProperty Name="Applications" Relationship="Self.FK_Applications_ListHousingStock" FromRole="ListHousingStock" ToRole="Applications" />
           <NavigationProperty Name="Arrears" Relationship="Self.FK_Arrears_ListHousingStock" FromRole="ListHousingStock" ToRole="Arrears" />
           <NavigationProperty Name="PaymentReport" Relationship="Self.FK_PaymentReport_ListHousingStock" FromRole="ListHousingStock" ToRole="PaymentReport" />
         </EntityType>
@@ -213,9 +338,60 @@
           <Property Name="Login" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="RoleId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Applications" Relationship="Self.FK_Applications_Users" FromRole="Users" ToRole="Applications" />
+          <NavigationProperty Name="Applications1" Relationship="Self.FK_Applications_Users1" FromRole="Users" ToRole="Applications" />
+          <NavigationProperty Name="Arrears" Relationship="Self.FK_Arrears_Users" FromRole="Users" ToRole="Arrears" />
           <NavigationProperty Name="PaymentReport" Relationship="Self.FK_PaymentReport_Users" FromRole="Users" ToRole="PaymentReport" />
           <NavigationProperty Name="Role" Relationship="Self.FK_Users_Role" FromRole="Users" ToRole="Role" />
         </EntityType>
+        <Association Name="FK_Applications_Executor">
+          <End Role="Executor" Type="Self.Executor" Multiplicity="1" />
+          <End Role="Applications" Type="Self.Applications" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Executor">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Applications">
+              <PropertyRef Name="ExecutorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Applications_ListHousingStock">
+          <End Role="ListHousingStock" Type="Self.ListHousingStock" Multiplicity="1" />
+          <End Role="Applications" Type="Self.Applications" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ListHousingStock">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Applications">
+              <PropertyRef Name="AdressId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Applications_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Applications" Type="Self.Applications" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Applications">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Applications_Users1">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Applications" Type="Self.Applications" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Applications">
+              <PropertyRef Name="ExecutorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Arrears_ListHousingStock">
           <End Role="ListHousingStock" Type="Self.ListHousingStock" Multiplicity="1" />
           <End Role="Arrears" Type="Self.Arrears" Multiplicity="*" />
@@ -225,6 +401,18 @@
             </Principal>
             <Dependent Role="Arrears">
               <PropertyRef Name="AdressId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Arrears_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Arrears" Type="Self.Arrears" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Arrears">
+              <PropertyRef Name="UserId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -265,14 +453,36 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Applications" EntityType="Self.Applications" />
           <EntitySet Name="Arrears" EntityType="Self.Arrears" />
+          <EntitySet Name="Executor" EntityType="Self.Executor" />
           <EntitySet Name="ListHousingStock" EntityType="Self.ListHousingStock" />
           <EntitySet Name="PaymentReport" EntityType="Self.PaymentReport" />
           <EntitySet Name="Role" EntityType="Self.Role" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
           <EntitySet Name="Users" EntityType="Self.Users" />
+          <AssociationSet Name="FK_Applications_Executor" Association="Self.FK_Applications_Executor">
+            <End Role="Executor" EntitySet="Executor" />
+            <End Role="Applications" EntitySet="Applications" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Applications_ListHousingStock" Association="Self.FK_Applications_ListHousingStock">
+            <End Role="ListHousingStock" EntitySet="ListHousingStock" />
+            <End Role="Applications" EntitySet="Applications" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Applications_Users" Association="Self.FK_Applications_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Applications" EntitySet="Applications" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Applications_Users1" Association="Self.FK_Applications_Users1">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Applications" EntitySet="Applications" />
+          </AssociationSet>
           <AssociationSet Name="FK_Arrears_ListHousingStock" Association="Self.FK_Arrears_ListHousingStock">
             <End Role="ListHousingStock" EntitySet="ListHousingStock" />
+            <End Role="Arrears" EntitySet="Arrears" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Arrears_Users" Association="Self.FK_Arrears_Users">
+            <End Role="Users" EntitySet="Users" />
             <End Role="Arrears" EntitySet="Arrears" />
           </AssociationSet>
           <AssociationSet Name="FK_PaymentReport_ListHousingStock" Association="Self.FK_PaymentReport_ListHousingStock">
@@ -294,6 +504,18 @@
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="Хранилище ModelContainer" CdmEntityContainer="Entities">
+          <EntitySetMapping Name="Applications">
+            <EntityTypeMapping TypeName="Model.Applications">
+              <MappingFragment StoreEntitySet="Applications">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="AdressId" ColumnName="AdressId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="ExecutorId" ColumnName="ExecutorId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Arrears">
             <EntityTypeMapping TypeName="Model.Arrears">
               <MappingFragment StoreEntitySet="Arrears">
@@ -304,6 +526,14 @@
                 <ScalarProperty Name="Phone" ColumnName="Phone" />
                 <ScalarProperty Name="Water" ColumnName="Water" />
                 <ScalarProperty Name="ElectricPower" ColumnName="ElectricPower" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Executor">
+            <EntityTypeMapping TypeName="Model.Executor">
+              <MappingFragment StoreEntitySet="Executor">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

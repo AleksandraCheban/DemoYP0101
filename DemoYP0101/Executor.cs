@@ -12,26 +12,16 @@ namespace DemoYP0101
     using System;
     using System.Collections.Generic;
     
-    public partial class Users
+    public partial class Executor
     {
-        public Users()
+        public Executor()
         {
             this.Applications = new HashSet<Applications>();
-            this.Applications1 = new HashSet<Applications>();
-            this.Arrears = new HashSet<Arrears>();
-            this.PaymentReport = new HashSet<PaymentReport>();
         }
     
         public int Id { get; set; }
         public string Name { get; set; }
-        public string Login { get; set; }
-        public string Password { get; set; }
-        public int RoleId { get; set; }
     
         public virtual ICollection<Applications> Applications { get; set; }
-        public virtual ICollection<Applications> Applications1 { get; set; }
-        public virtual ICollection<Arrears> Arrears { get; set; }
-        public virtual ICollection<PaymentReport> PaymentReport { get; set; }
-        public virtual Role Role { get; set; }
     }
 }
