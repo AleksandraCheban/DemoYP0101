@@ -25,41 +25,22 @@ namespace DemoYP0101
         {
             InitializeComponent();
             LoadArrears();
-            CheckUserRole();
         }
         public ArrearsWindow(Users user)
         {
             InitializeComponent();
             LoadArrears();
-            CheckUserRole();
+            
 
         }
-        private void CheckUserRole()
-        {
-            var currentUser = CurrentSession.CurrentUser;
-            
-            if (currentUser == null || currentUser.RoleId == 2)
-            {
-                
-                AddButton.Visibility = Visibility.Collapsed;
-                DeleteButton.Visibility = Visibility.Collapsed;
-                Remake.Visibility = Visibility.Collapsed;
-            }
-            else
-            {
-                
-                AddButton.Visibility = Visibility.Visible;
-                DeleteButton.Visibility = Visibility.Visible;
-                Remake.Visibility = Visibility.Visible;
-            }
-        }
+        
 
 
         private void LoadArrears()
         {
             var currentUser = CurrentSession.CurrentUser;
             var reportData = _db.Arrears
-            .Where(a => a.UserId == currentUser.Id) // Фильтр по ID текущего пользователя
+           
             .Select(pr => new
             {
             pr.Id,
@@ -105,7 +86,7 @@ namespace DemoYP0101
                         {
                             _db.Arrears.Remove(arrearToDelete);
                             _db.SaveChanges();
-                            LoadArrears(); // Обновляем таблицу
+                            LoadArrears(); 
                             MessageBox.Show("Задолженность успешно удалена");
                         }
                     }
@@ -126,7 +107,7 @@ namespace DemoYP0101
             var addWindow = new AddEditArrearsWindow();
             if (addWindow.ShowDialog() == true)
             {
-                LoadArrears(); // Обновляем таблицу после добавления
+                LoadArrears(); 
             }
         }
 
@@ -143,7 +124,7 @@ namespace DemoYP0101
                     var editWindow = new AddEditArrearsWindow(arrearToEdit);
                     if (editWindow.ShowDialog() == true)
                     {
-                        LoadArrears(); // Обновляем таблицу после редактирования
+                        LoadArrears(); 
                     }
                 }
             }

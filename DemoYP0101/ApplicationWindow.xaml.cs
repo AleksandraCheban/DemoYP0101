@@ -34,13 +34,13 @@ namespace DemoYP0101
             try
             {
                 var applicationsQuery = context.Applications
-                    .Include("ListHousingStock")  // Для получения адреса
-                    .Include("Executor")          // Для получения статуса
-                    .Include("Users");            // Для получения пользователя
+                    .Include("ListHousingStock")  
+                    .Include("Executor")          
+                    .Include("Users");            
 
                 if (showHistory)
                 {
-                    // Заявки со статусом "Выполнена" (ID = 2)
+                    
                     ApplicationsGrid.ItemsSource = applicationsQuery
                         .Where(a => a.ExecutorId == 2)
                         .OrderByDescending(a => a.Id)
@@ -48,7 +48,7 @@ namespace DemoYP0101
                 }
                 else
                 {
-                    // Заявки со статусом "В процессе" (ID = 1)
+                    
                     ApplicationsGrid.ItemsSource = applicationsQuery
                         .Where(a => a.ExecutorId == 1)
                         .OrderByDescending(a => a.Id)
@@ -80,11 +80,11 @@ namespace DemoYP0101
 
         private void CreateButton_Click(object sender, RoutedEventArgs e)
         {
-            // Создаем окно для добавления заявки
+            
             var addWindow = new AddApplicationWindow();
             if (addWindow.ShowDialog() == true)
             {
-                LoadApplications(); // Обновить список после создания
+                LoadApplications(); 
             }
         }
 
@@ -117,7 +117,8 @@ namespace DemoYP0101
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
+            new MenuWindow().Show();
+            Close();
         }
     }
 }
